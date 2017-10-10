@@ -11,9 +11,9 @@ const Header = () => {
     <nav>
       {navItems.map(item => {
         if(item.isIndex) {
-          return <IndexLink key={item.name} to={item.routeTo} activeClassName={item.activeClassName}> {item.name} </IndexLink>;
+          return (<IndexLink key={item.name} to={item.routeTo} activeClassName={item.activeClassName}> {item.name} </IndexLink>);
         }
-        return <Link key={item.name} to={item.routeTo} activeClassName={item.activeClassName}> {item.name} </Link>;
+        return (<Link key={item.name} to={item.routeTo} activeClassName={item.activeClassName}> {item.name} </Link>);
       })}
     </nav>
   );

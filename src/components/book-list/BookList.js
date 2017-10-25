@@ -1,31 +1,44 @@
 import React, { Component} from 'react';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import BookItem from './BookItem';
 import BookDetails from '../book-details/BookDetails';
+import {selectBook} from '../../actions/selectedBook';
+
+const actions = {
+  selectBook,
+};
 
 class BookList extends Component {
 
   constructor(props) {
     super(props);
 
-    this.state = {
-      showDetails: false,
-      selectedBook: null
-    };
-
     this.handleBook = this.handleBook.bind(this);
   }
 
   handleBook(book) {
-    this.setState({showDetails: true, selectedBook: book});
+    this.props.selectBook(book);
   }
 
   render() {
-    const {books} = this.props;
+    const {books, isFetching, error, selectedBook, showDetails} = this.props;
+    if (isFetching) {
+      return (
+        <div>Loading............</div>
+      );
+    }
+
+    if (error) { 
+      return (
+        <div> Some error is {error} </div>
+      );
+    }
+
     const booksIteration = books.map((book) => {
       return (
         <BookItem key={book.id} book={book} clickHandler={(book) => {
-          this.setState({showDetails: true, selectedBook: book});
+          this.props.selectBook(book);
         }}/>
       );
     });
@@ -44,7 +57,15 @@ class BookList extends Component {
 }
 
 BookList.propTypes = {
-  books: PropTypes.array.isRequired
+  books: PropTypes.array.isRequired,
+  isFetching: PropTypes.bool,
+  error: PropTypes.string,
+  selectedBook: PropTypes.object,
+  selectBook: PropTypes.func
 };
 
-export default BookList;
+function mapStateToProps({selectedBook, books}) {
+  return {selectedBook, books};
+}
+
+export default connect(mapStateToProps, actions)(BookList);

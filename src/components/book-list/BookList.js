@@ -22,23 +22,13 @@ class BookList extends Component {
   }
 
   render() {
-    const {books, isFetching, error, selectedBook, showDetails} = this.props;
-    if (isFetching) {
-      return (
-        <div>Loading............</div>
-      );
-    }
+    const {books, selectBook} = this.props;
+    const {book, showDetails} = this.props.selectedBook;
 
-    if (error) { 
+    const booksIteration = books.map(b => {
       return (
-        <div> Some error is {error} </div>
-      );
-    }
-
-    const booksIteration = books.map((book) => {
-      return (
-        <BookItem key={book.id} book={book} clickHandler={(book) => {
-          this.props.selectBook(book);
+        <BookItem key={b.id} book={b} clickHandler={b => {
+          selectBook(b);
         }}/>
       );
     });
@@ -47,8 +37,8 @@ class BookList extends Component {
         <ul className="list-group">
           {booksIteration}
         </ul>
-        {this.state.showDetails
-            ? (<BookDetails book={this.state.selectedBook} />)
+        {showDetails
+            ? (<BookDetails book={book} />)
             : ''
         }
       </div>
@@ -64,8 +54,8 @@ BookList.propTypes = {
   selectBook: PropTypes.func
 };
 
-function mapStateToProps({selectedBook, books}) {
-  return {selectedBook, books};
+function mapStateToProps({selectedBook}) {
+  return {selectedBook};
 }
 
 export default connect(mapStateToProps, actions)(BookList);

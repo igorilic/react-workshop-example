@@ -16,7 +16,19 @@ class Home extends Component {
     this.props.fetchBooks();
   }
   render() {
-    const {books} = this.props.books;
+    const {isFetching, error, books} = this.props.books;
+
+    if (isFetching) {
+      return (
+        <div>Loading............</div>
+      );
+    }
+
+    if (error) { 
+      return (
+        <div> Some error is {error} </div>
+      );
+    }
 
     return (
       <div className="home-page">
